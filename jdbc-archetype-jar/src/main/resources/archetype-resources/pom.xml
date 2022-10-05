@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${groupId}</groupId>
+	<artifactId>${artifactId}</artifactId>
+	<packaging>jar</packaging>
+	<version>${version}</version>
+	<!-- TODO project name  -->
+	<name>testingConenction</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.21</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.example.TestConnection</mainClass>
+						</manifest>
+						<addMavenDescriptor>true</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!--maven-shade-plugin 将依赖的jar包打包到当前jar包（常规打包是不会将所依赖jar包打进来的-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+<!--							<artifactSet>-->
+<!--								<excludes>-->
+<!--									<exclude>com.google.code.findbugs:jsr305</exclude>-->
+<!--									<exclude>org.slf4j:*</exclude>-->
+<!--									<exclude>log4j:*</exclude>-->
+<!--									<exclude>org.apache.hadoop:*</exclude>-->
+<!--								</excludes>-->
+<!--							</artifactSet>-->
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<transformers combine.children="append">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"></transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
